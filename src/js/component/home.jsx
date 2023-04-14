@@ -2,7 +2,25 @@ import React, { useState } from "react";
 
 //create your first component
 const Home = () => {
-			//el valor del input
+
+  //fetch introducido, render no funcional
+  fetch('https://assets.breatheco.de/apis/fake/todos/user/borjamese', {
+    method: 'POST', // or 'PUT'
+    body: JSON.stringify(data), // data can be a `string` or  an {object} which comes from somewhere further above in our application
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  })
+
+  .then(res => {
+    if (!res.ok) throw Error(res.statusText);
+    return res.json();
+  })
+  .then(response => console.log('Success:', response))
+  .catch(error => console.error(error));
+
+//fetch introducido hasta aquí
+
 	const [currentWord, setCurrentWord] = useState("");
  
 	// el estado de los elementos en la lista que he añadido hasta el momento
