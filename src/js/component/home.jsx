@@ -4,11 +4,22 @@ import React, { useState } from "react";
 const Home = () => {
 
   //fetch introducido, render no funcional
+
+  const data = [{
+    "label" : "probando",
+    "done" : false
+  },
+{
+"label" : "hola",
+"done": false
+}
+];
+
   fetch('https://assets.breatheco.de/apis/fake/todos/user/borjamese', {
-    method: 'POST', // or 'PUT'
-    body: JSON.stringify(data), // data can be a `string` or  an {object} which comes from somewhere further above in our application
-    headers:{
-      'Content-Type': 'application/json'
+		method: 'PUT', // or 'POST'
+		body: JSON.stringify(data), // data can be a `string` or  an {object} which comes from somewhere further above in our application
+		headers:{
+		  'Content-Type': 'application/json'
     }
   })
 
@@ -19,6 +30,7 @@ const Home = () => {
   .then(response => console.log('Success:', response))
   .catch(error => console.error(error));
 
+ 
 //fetch introducido hasta aquí
 
 	const [currentWord, setCurrentWord] = useState("");
@@ -32,7 +44,7 @@ const Home = () => {
 
   return (
     <div className="home-header">
-      <h1>To-dos</h1>
+      <h1>Todos</h1>
 	  
       <input
   type="text"
