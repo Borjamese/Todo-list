@@ -7,7 +7,7 @@ const Home = () => {
   const [wordInList, setWordInList] = useState([]);
 
   useEffect(() => {
-    // fetch todos on mount
+    // fetch de los todos 
     fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese")
       .then(resp => resp.json())
       .then(data => {
@@ -18,10 +18,11 @@ const Home = () => {
       });
   }, []);
 
+ // eliminar un todo
   const handleDelete = (itemToDelete) => {
-    // remove item from list
     setWordInList((prevList) => prevList.filter((w) => w !== itemToDelete));
-    // update items in API
+
+    // Actualizar los items en la API
     fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese", {
       method: "PUT",
       body: JSON.stringify(
@@ -44,10 +45,11 @@ const Home = () => {
 
   const handleSubmit = () => {
     if (currentWord.trim() !== "") {
-      // add item to list
+      // Añadir un item a la lista
       setWordInList((prevList) => [...prevList, currentWord]);
-      // add item to API
-      fetch("https://assets.breatheco.de/apis/fake/todos/user/serch", {
+
+      // Añaadir un item a la API
+      fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese", {
         method: "PUT",
         body: JSON.stringify([{ label: currentWord, done: false }]),
         headers: {
