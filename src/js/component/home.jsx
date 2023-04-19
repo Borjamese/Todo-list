@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 
 //create your first component
 const Home = () => {
-
+let array = [1,2
+]
   const [currentWord, setCurrentWord] = useState("");
   const [wordInList, setWordInList] = useState([]);
 
