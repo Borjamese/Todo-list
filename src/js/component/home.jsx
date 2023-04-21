@@ -25,29 +25,28 @@ const getAllelements = () => {
   }, []);
 
  // eliminar un todo
-  const handleDelete = (itemToDelete) => {
-    setWordInList((prevList) => prevList.filter((w) => w !== itemToDelete));
+  const handleDelete = (itemToDelete) => { 
 
-    // Actualizar los items en la API
-    fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese", {
-      method: "PUT",
-      body: JSON.stringify(
-        wordInList.map((w) => ({ label: w, done: false }))
-      ),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => {
-        if (!resp.ok) {
-          throw new Error("Failed to update todo list");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
+  	var myHeaders = new Headers();
+         myHeaders.append("Content-Type", "application/json");
+
+
+		 
+
+         var requestOptions = {
+           method: 'PUT',
+           headers: myHeaders,
+           body: JSON.stringify(wordInList.filter((w) => w !== itemToDelete)),
+           redirect: 'follow'
+         };
+
+        fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese", requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            setWordInList(wordInList.filter((w) => w !== itemToDelete));
+          })
+          .catch(error => console.log('error', error));
+	        }
 
   const createElement = () => {
 		var myHeaders = new Headers();
@@ -81,24 +80,22 @@ const getAllelements = () => {
         onChange={(evento) => setCurrentWord(evento.target.value)}
         value={currentWord}
         placeholder="Type here"
-        // onKeyDown={(event) => {
-        //   if (event.key === "Enter") {
-        //     handleSubmit();
-        //   }
-        // }}
+         onKeyDown={(event) => {
+          if (event.key === "Enter") {
+             createElement();
+           }
+         }}
       />
       <button onClick={createElement}> Agregar tarea</button>
       <br/><br/>
       <ul className="list-group">
-       
-       {wordInList.map((w, index)=>
-       (
-        <li key={index}>
-          {w.label}
-        </li>
-       )
-       )}
-      </ul>
+  {wordInList.map((w, index) => (
+    <li key={index}>
+      {w.label}
+      <button onClick={() => handleDelete(w)}>Eliminar</button>
+    </li>
+  ))}
+</ul>
     </div>
   );
 };
