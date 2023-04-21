@@ -2,21 +2,26 @@ import React, { useState, useEffect } from "react";
 
 //create your first component
 const Home = () => {
-let array = [1,2
-]
+
   const [currentWord, setCurrentWord] = useState("");
   const [wordInList, setWordInList] = useState([]);
 
+const getAllelements = () => {
+  fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese")
+  .then(resp => resp.json())
+  .then(data => {
+    setWordInList(data);
+    console.log(data)
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+
+
   useEffect(() => {
     // fetch de los todos 
-    fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese")
-      .then(resp => resp.json())
-      .then(data => {
-        setWordInList(data.map(todo => todo.label));
-      })
-      .catch(error => {
-        console.log(error);
-      });
+   getAllelements()
   }, []);
 
  // eliminar un todo
@@ -44,30 +49,28 @@ let array = [1,2
   };
   
 
-  const handleSubmit = () => {
-    if (currentWord.trim() !== "") {
-      // Añadir un item a la lista
-      setWordInList((prevList) => [...prevList, currentWord]);
+  const createElement = () => {
+		var myHeaders = new Headers();
+         myHeaders.append("Content-Type", "application/json");
 
-      // Añaadir un item a la API
-      fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese", {
-        method: "PUT",
-        body: JSON.stringify([{ label: currentWord, done: false }]),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error("Failed to add todo item");
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-      setCurrentWord("");
-    }
-  };
+
+		 let agregar = wordInList.concat( {
+			"label": currentWord, 
+			"done": false
+		  })
+
+         var requestOptions = {
+           method: 'PUT',
+           headers: myHeaders,
+           body: JSON.stringify(agregar),
+           redirect: 'follow'
+         };
+
+        fetch("https://assets.breatheco.de/apis/fake/todos/user/borjamese", requestOptions)
+          .then(response => response.json())
+          .then(result => getAllelements())
+          .catch(error => console.log('error', error));
+	        }
 
   return (
     <div className="home-header">
@@ -78,26 +81,23 @@ let array = [1,2
         onChange={(evento) => setCurrentWord(evento.target.value)}
         value={currentWord}
         placeholder="Type here"
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            handleSubmit();
-          }
-        }}
+        // onKeyDown={(event) => {
+        //   if (event.key === "Enter") {
+        //     handleSubmit();
+        //   }
+        // }}
       />
+      <button onClick={createElement}> Agregar tarea</button>
       <br/><br/>
       <ul className="list-group">
-        {wordInList.map((w) => (
-          <li className="list-group-item" key={w}>
-            {w}{" "}
-            <button
-              aria-label='delete item'
-              type='button'
-              onClick={() => handleDelete(w)}
-            >
-              X
-            </button>{" "}
-          </li>
-        ))}
+       
+       {wordInList.map((w, index)=>
+       (
+        <li key={index}>
+          {w.label}
+        </li>
+       )
+       )}
       </ul>
     </div>
   );
